@@ -3,3 +3,6 @@ myenv/
 
 # 캐시
 .DS_Store
+
+# 데이터셋
+blinkit-dataset/
