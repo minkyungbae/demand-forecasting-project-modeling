@@ -2,6 +2,7 @@
 ---
 - 사용하는 모델 : **LDA**
 - 사용하는 데이터셋 : [Blinkit Sales Dataset]("https://www.kaggle.com/datasets/akxiit/blinkit-sales-dataset?select=blinkit_order_items.csv")
+- Open-Meteo(날씨 데이터)
 ---
 ## 데이터셋 개요
 - 제품 상세 정보, 주문 수량, 매출액, 타임스탬프 등 Blinkit의 판매 데이터가 포함되어 있습니다.
