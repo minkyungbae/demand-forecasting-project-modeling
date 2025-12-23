@@ -17,6 +17,7 @@
 - 시장 동향 : 다양한 요인의 식료품 판매 실적에 미치는 영향
 ---
 ## 날씨 데이터
+> 본 프로젝트에서는 Open-Meteo Archive API를 활용하여 인도 주요 도시의 2023–2024 기상 데이터를 수집하고, 일 단위 시계열 데이터를 월별로 리샘플링하여 수요 예측 모델의 외생 변수로 활용.
 - 사용 API 👉 Open-Meteo – Archive API
 - 선택한 이유
     - API Key 없이 사용 가능하다.
@@ -27,15 +28,19 @@
 ## 폴더 구조
 ```
 demand-forecasting-project-modeling
+├─ API/
+│  └─ weather_api.ipynb
 ├─ README.md
 ├─ backend/
-├─ blinkit-dataset/
-│  └─ blinkit_master_data.csv
-├─ crawling/
+├─ data/
+│  ├─ EDA.ipynb                       # blinkit_master_data_weather.csv 검증용 코드
+│  ├─ city_map.csv                    # 소도시를 주(state)로 매핑한 결과 csv
+│  ├─ weather_df.csv                  # 주(state) 기준으로 날씨 정보 호출 결과 csv
+│  └─ weather/                        # 생성된 csv 파일 저장 경로
 ├─ frontend/
 ├─ modeling/
 │  ├─ lda-model.py
-│  └─ memos
+│  └─ memos/
 │     └─ basic-LDA-pipeline.txt
 └─ requirements.txt
 
