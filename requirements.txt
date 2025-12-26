@@ -82,5 +82,6 @@ wcwidth==0.2.14
 webdriver-manager==4.0.2
 websocket-client==1.9.0
 wsproto==1.2.0
+xgboost==2.1.4
 yt-dlp==2025.10.14
 zipp==3.23.0
