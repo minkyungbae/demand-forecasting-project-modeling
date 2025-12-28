@@ -1,7 +1,7 @@
 import pandas as pd
 
 # ---------- 데이터셋 불러오기 ----------
-df = pd.read_csv("../../data/blinkit-dataset/blinkit_master_data_eda_mk_251224.csv")
+df = pd.read_csv("../../../data/blinkit-dataset/blinkit_master_data_eda_mk_251224.csv")
 
 
 # ---------- order_date 타입 변경 ----------
