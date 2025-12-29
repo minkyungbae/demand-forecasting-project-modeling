@@ -1,0 +1,62 @@
+FastAPI
+- 서버 실행 : % uvicorn main:app --reload
+- Swagger 자동 생성 : http://localhost:8000/docs
+
+
+React (Vite로 진행)
+- 시작
+npm create vite@latest
+-----------------------
+Project name: frontend
+Framework: React <- 방향키로 선택 후 엔터
+Variant: JavaScript
+-----------------------
+
+예)
+◆  Select a framework:
+│  ○ Vanilla
+│  ○ Vue
+│  ● React
+│  ○ Preact
+│  ○ Lit
+│  ○ Svelte
+│  ○ Solid
+│  ○ Qwik
+│  ○ Angular
+│  ○ Marko
+│  ○ Others
+
+그 뒤
+◆  Select a variant:
+│  ○ TypeScript
+│  ○ TypeScript + React Compiler
+│  ○ TypeScript + SWC
+│  ● JavaScript
+│  ○ JavaScript + React Compiler
+│  ○ JavaScript + SWC
+│  ○ React Router v7 ↗
+│  ○ TanStack Router ↗
+│  ○ RedwoodSDK ↗
+│  ○ RSC ↗
+│  ○ Vike ↗
+
+마지막
+  Use rolldown-vite (Experimental)?:
+│  ○ Yes
+│  ● No
+
+dev 서버 시작
+◆  Install with npm and start now?
+│  ● Yes / ○ No
+└
+
+그럼 터미널에
+
+  VITE v7.3.0  ready in 866 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+
+다시 실행
+npm run dev
