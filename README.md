@@ -25,20 +25,35 @@
 ```
 demand-forecasting-project-modeling
 ├─ README.md
-├─ backend/
-│  ├─ API/
+├─ backend
+│  ├─ API
 │  │  └─ weather_api.ipynb
-│  ├─ features/
-│  │  └─ time-features.ipynb
-│  └─ modeling/
-│     ├─ baseline-model-code.ipynb
-│     └─ linear-model.py
-├─ data/
-├─ frontend/
-├─ function/
-│  └─ eda/
-│     ├─ eda-blinkit-master-data.ipynb
-│     └─ eda-weather.ipynb
+│  ├─ features
+│  │  ├─ time_features.ipynb
+│  │  └─ time_features.py
+│  ├─ main.py
+│  ├─ models
+│  │  ├─ check
+│  │  │  ├─ baseline_model_code.ipynb
+│  │  │  └─ demand_code.ipynb
+│  │  ├─ linear_models.py
+│  │  └─ tree_models.py
+│  └─ train
+│     └─ train-linear.py
+├─ data
+├─ documents
+│  └─ command.txt
+├─ frontend
+│  ├─ ...
+│  ├─ src
+│  │  ├─ ...
+│  │  ├─ App.jsx
+│  │  └─ ...
+│  └─ ...
+├─ function
+│  └─ eda
+│     ├─ eda_blinkit_master_data.ipynb
+│     └─ eda_weather.ipynb
 └─ requirements.txt
 
 ```
