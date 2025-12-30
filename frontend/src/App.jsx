@@ -1,23 +1,19 @@
-import { useEffect, useState } from "react";
+import { RouterProvider } from 'react-router-dom';
 
-function App() {
-  const [message, setMessage] = useState("");
+// project imports
+import router from 'routes';
+import ThemeCustomization from 'themes';
 
-  useEffect(() => {
-    fetch("http://localhost:8000/hello")
-      .then((res) => res.json())
-      .then((data) => {
-        setMessage(data.message);
-      });
-  }, []);
+import ScrollTop from 'components/ScrollTop';
 
+// ==============================|| APP - THEME, ROUTER, LOCAL ||============================== //
+
+export default function App() {
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Demand Forcasting 'Blinkit' Top 10 Category</h1>
-
-      <p style={{ whiteSpace: "pre-line" }}>{message}</p>
-    </div>
+    <ThemeCustomization>
+      <ScrollTop>
+        <RouterProvider router={router} />
+      </ScrollTop>
+    </ThemeCustomization>
   );
 }
-
-export default App;
