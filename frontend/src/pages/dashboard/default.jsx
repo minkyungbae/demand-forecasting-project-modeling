@@ -3,21 +3,24 @@
 import { useState } from 'react';
 
 // material-ui : React 전용 UI 라이브러리(MUI)
-import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar'; // 사용자 프로필 이미지
+import AvatarGroup from '@mui/material/AvatarGroup'; // 여러 아바타 묶어서 표시
+import Button from '@mui/material/Button'; // 버튼
+import Grid from '@mui/material/Grid'; // 레이아웃(행/열 배치)
+import IconButton from '@mui/material/IconButton'; // 아이콘 전용 버튼
+// ============ 목록 UI(아바타, 버튼, 문구) ============
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItem from '@mui/material/ListItem'; 
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+// ============ 드롭다운 메뉴 ============
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack'; // 간격 자동 정렬 레이아웃
+import Typography from '@mui/material/Typography'; // 텍스트 (h1, p 등 대체)
+import Box from '@mui/material/Box'; // 범용 레이아웃 박스(div 느낌)
+
 
 // 현재 프로젝트 내에 있는 컴포넌트를 절대 경로로 imports
 import MainCard from 'components/MainCard';
@@ -58,14 +61,20 @@ const actionSX = {
 };
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
+{/* DashboardDefault는 여러 카드, 차트, 테이블을 Grid로 배치하고 메뉴 열림/닫힘 상태만 관리 */}
 
-export default function DashboardDefault() {
+export default function DashboardDefault() { // 대시보드 화면 전체를 반환하는 함수 컴포넌트, 다른 파일에서 바로 import 가능(export)
+  // 메뉴가 어디에 붙어서 열릴지 기억
+  // Anchor : 메뉴가 매달릴 기준점 => 어떤 버튼을 기준(Anchor)으로 열릴지
   const [orderMenuAnchor, setOrderMenuAnchor] = useState(null);
   const [analyticsMenuAnchor, setAnalyticsMenuAnchor] = useState(null);
 
+  // 아이콘 버튼 클릭 시, 클린된 버튼 DOM을 상태로 저장. (메뉴가 클릭한 위치에 열림)
   const handleOrderMenuClick = (event) => {
     setOrderMenuAnchor(event.currentTarget);
   };
+  // 메뉴 닫기
+  // Anchor 제거되면 메뉴가 닫힘
   const handleOrderMenuClose = () => {
     setOrderMenuAnchor(null);
   };
@@ -77,8 +86,10 @@ export default function DashboardDefault() {
     setAnalyticsMenuAnchor(null);
   };
 
-  return (
+  return ( // size : xs(모바일), sm(태블릿), md(작은 데스크탑), lg(큰 화면)
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+
+      {/* ============================== Dashboard ============================== */}
       {/* row 1 */}
       <Grid sx={{ mb: -2.25 }} size={12}>
         <Typography variant="h5">Dashboard</Typography>
@@ -96,10 +107,14 @@ export default function DashboardDefault() {
         <AnalyticEcommerce title="Total Sales" count="35,078" percentage={27.4} isLoss color="warning" extra="20,395" />
       </Grid>
       <Grid sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} size={{ md: 8 }} />
+
+      {/* ============================== Unique Visitor ============================== */}
       {/* row 2 */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <UniqueVisitorCard />
       </Grid>
+
+      {/* ============================== Income Overview ============================== */}
       <Grid size={{ xs: 12, md: 5, lg: 4 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid>
@@ -119,6 +134,8 @@ export default function DashboardDefault() {
           <MonthlyBarChart />
         </MainCard>
       </Grid>
+
+      {/* ============================== Recent Orders ============================== */}
       {/* row 3 */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
@@ -148,6 +165,8 @@ export default function DashboardDefault() {
           <OrdersTable />
         </MainCard>
       </Grid>
+
+      {/* ============================== Analytics Report ============================== */}
       <Grid size={{ xs: 12, md: 5, lg: 4 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid>
@@ -190,10 +209,14 @@ export default function DashboardDefault() {
           <ReportAreaChart />
         </MainCard>
       </Grid>
+
+      {/* ============================== Sale Report Card ============================== */}
       {/* row 4 */}
       <Grid size={{ xs: 12, md: 7, lg: 8 }}>
         <SaleReportCard />
       </Grid>
+
+      {/* ============================== Transaction History ============================== */}
       <Grid size={{ xs: 12, md: 5, lg: 4 }}>
         <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
           <Grid>
@@ -279,6 +302,8 @@ export default function DashboardDefault() {
             </ListItem>
           </List>
         </MainCard>
+
+        {/* ============================== Help & Support Chat ============================== */}
         <MainCard sx={{ mt: 2 }}>
           <Stack sx={{ gap: 3 }}>
             <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
