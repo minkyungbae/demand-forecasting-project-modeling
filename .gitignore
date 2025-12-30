@@ -7,3 +7,6 @@ myenv/
 # 데이터셋
 blinkit-dataset/
 weather/
+
+# React 이전 프로젝트
+old_frontend
