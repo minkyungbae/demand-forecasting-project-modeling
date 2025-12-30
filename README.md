@@ -59,4 +59,4 @@ demand-forecasting-project-modeling
 ```
 ---
 ## 문서 정리
-[Notion]("https://www.notion.so/4-Blinkit-2c79e2888600801cabeed6b004a92719?source=copy_link")
+[Notion](https://www.notion.so/4-Blinkit-2c79e2888600801cabeed6b004a92719?source=copy_link)
