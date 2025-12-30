@@ -19,7 +19,7 @@
     - 연구/상업적 사용에도 가능하다.
 ---
 ## 컴포넌트 출처
-[React Component from]("https://github.com/codedthemes/mantis-free-react-admin-template")
+[React Component from](https://github.com/codedthemes/mantis-free-react-admin-template)
 ---
 ## 폴더 구조
 ```
