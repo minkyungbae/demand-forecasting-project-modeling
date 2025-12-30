@@ -1,6 +1,8 @@
+{/* 이 파일은 직접 그리는 게 아니라 카트, 차트, 테이블을 불러와서 배치하는 파일입니다. */}
+
 import { useState } from 'react';
 
-// material-ui
+// material-ui : React 전용 UI 라이브러리(MUI)
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Button from '@mui/material/Button';
@@ -17,21 +19,22 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-// project imports
+// 현재 프로젝트 내에 있는 컴포넌트를 절대 경로로 imports
 import MainCard from 'components/MainCard';
-import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
-import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart';
-import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart';
-import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard';
-import SaleReportCard from 'sections/dashboard/default/SaleReportCard';
-import OrdersTable from 'sections/dashboard/default/OrdersTable';
+import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce'; // 카드&통계 컴포넌트(매출, 주문 수, 방문자 수 같은 요약 카드)
+import MonthlyBarChart from 'sections/dashboard/default/MonthlyBarChart'; // 월별 막대 그래프
+import ReportAreaChart from 'sections/dashboard/default/ReportAreaChart'; // 추이(area) 그래프
+import UniqueVisitorCard from 'sections/dashboard/default/UniqueVisitorCard'; // 방문자 수
+import SaleReportCard from 'sections/dashboard/default/SaleReportCard'; // 판매 리포트
+import OrdersTable from 'sections/dashboard/default/OrdersTable'; // 주문 목록 데이블
 
-// assets
-import EllipsisOutlined from '@ant-design/icons/EllipsisOutlined';
-import GiftOutlined from '@ant-design/icons/GiftOutlined';
-import MessageOutlined from '@ant-design/icons/MessageOutlined';
-import SettingOutlined from '@ant-design/icons/SettingOutlined';
+// assets(아이콘 리소스)
+import EllipsisOutlined from '@ant-design/icons/EllipsisOutlined'; // 더보기 메뉴 (...)
+import GiftOutlined from '@ant-design/icons/GiftOutlined'; // 혜택/보너스
+import MessageOutlined from '@ant-design/icons/MessageOutlined'; // 메시지
+import SettingOutlined from '@ant-design/icons/SettingOutlined'; // 설정
 
+// 사용자 프로필 사진 import
 import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
