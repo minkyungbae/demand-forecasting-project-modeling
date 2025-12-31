@@ -77,9 +77,6 @@ export default function InputPage() {
 
   return (
     <Box sx={{ maxWidth: 1000, mx: 'auto', pb: 8 }}>
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-        0단계: 데이터 파일 업로드 및 구성
-      </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
         업로드한 파일의 컬럼을 확인하고, 수요 예측 모델에 사용할 변수들을 설정해 주세요.
       </Typography>
