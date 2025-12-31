@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 
 // third-party
 import * as Yup from 'yup';
@@ -21,7 +22,6 @@ import { Formik } from 'formik';
 // project imports
 import IconButton from 'components/@extended/IconButton';
 import AnimateButton from 'components/@extended/AnimateButton';
-
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // assets
@@ -33,6 +33,19 @@ import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleOutlined';
 export default function AuthRegister() {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
+
+  // 소셜 로그인 리다이렉트 핸들러
+  const handleSocialLogin = (platform) => {
+    const SOCIAL_AUTH_URLS = {
+      google: 'https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_ID&redirect_uri=YOUR_URL&response_type=code&scope=email profile',
+      naver: 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=YOUR_NAVER_ID&redirect_uri=YOUR_URL&state=STATE_STRING',
+      kakao: 'https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_ID&redirect_uri=YOUR_URL&response_type=code'
+    };
+
+    // 해당 플랫폼의 로그인 페이지로 바로 이동
+    window.location.href = SOCIAL_AUTH_URLS[platform];
+  };
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -52,188 +65,196 @@ export default function AuthRegister() {
 
   return (
     <>
-      <Formik
-        initialValues={{
-          firstname: '',
-          lastname: '',
-          email: '',
-          company: '',
-          password: '',
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          firstname: Yup.string().max(255).required('First Name is required'),
-          lastname: Yup.string().max(255).required('Last Name is required'),
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string()
-            .required('Password is required')
-            .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
-            .max(10, 'Password must be less than 10 characters')
-        })}
-      >
-        {({ errors, handleBlur, handleChange, touched, values }) => (
-          <form noValidate>
-            <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
-                  <OutlinedInput
-                    id="firstname-login"
-                    type="firstname"
-                    value={values.firstname}
-                    name="firstname"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="John"
-                    fullWidth
-                    error={Boolean(touched.firstname && errors.firstname)}
-                  />
-                </Stack>
-                {touched.firstname && errors.firstname && (
-                  <FormHelperText error id="helper-text-firstname-signup">
-                    {errors.firstname}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="lastname-signup">Last Name*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.lastname && errors.lastname)}
-                    id="lastname-signup"
-                    type="lastname"
-                    value={values.lastname}
-                    name="lastname"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Doe"
-                  />
-                </Stack>
-                {touched.lastname && errors.lastname && (
-                  <FormHelperText error id="helper-text-lastname-signup">
-                    {errors.lastname}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid size={12}>
-                <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="company-signup">Company</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.company && errors.company)}
-                    id="company-signup"
-                    value={values.company}
-                    name="company"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Demo Inc."
-                  />
-                </Stack>
-                {touched.company && errors.company && (
-                  <FormHelperText error id="helper-text-company-signup">
-                    {errors.company}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid size={12}>
-                <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="email-signup">Email Address*</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.email && errors.email)}
-                    id="email-login"
-                    type="email"
-                    value={values.email}
-                    name="email"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="demo@company.com"
-                  />
-                </Stack>
-                {touched.email && errors.email && (
-                  <FormHelperText error id="helper-text-email-signup">
-                    {errors.email}
-                  </FormHelperText>
-                )}
-              </Grid>
-              <Grid size={12}>
-                <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="password-signup">Password</InputLabel>
-                  <OutlinedInput
-                    fullWidth
-                    error={Boolean(touched.password && errors.password)}
-                    id="password-signup"
-                    type={showPassword ? 'text' : 'password'}
-                    value={values.password}
-                    name="password"
-                    onBlur={handleBlur}
-                    onChange={(e) => {
-                      handleChange(e);
-                      changePassword(e.target.value);
-                    }}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          color="secondary"
-                        >
-                          {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    placeholder="******"
-                  />
-                </Stack>
-                {touched.password && errors.password && (
-                  <FormHelperText error id="helper-text-password-signup">
-                    {errors.password}
-                  </FormHelperText>
-                )}
-                <FormControl fullWidth sx={{ mt: 2 }}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid>
-                      <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
-                    </Grid>
-                    <Grid>
-                      <Typography variant="subtitle1" fontSize="0.75rem">
-                        {level?.label}
-                      </Typography>
-                    </Grid>
+      <Grid container spacing={3}>
+        {/* 소셜 로그인 버튼 섹션 */}
+        <Grid item xs={12}>
+          <Stack direction="column" spacing={2}>
+            <AnimateButton>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleSocialLogin('google')}
+                sx={{ mb: 1 }}
+              >
+                Google
+              </Button>
+            </AnimateButton>
+            <AnimateButton>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={() => handleSocialLogin('naver')}
+                sx={{ mb: 1, color: '#03C75A', borderColor: '#03C75A', '&:hover': { borderColor: '#02b350', bgcolor: '#f0fff5' } }}
+              >
+                네이버
+              </Button>
+            </AnimateButton>
+            <AnimateButton>
+              <Button
+                fullWidth
+                size="large"
+                variant="outlined"
+                onClick={() => handleSocialLogin('kakao')}
+                sx={{ color: '#3C1E1E', borderColor: '#FEE500', bgcolor: '#FEE500', '&:hover': { bgcolor: '#fada0a', borderColor: '#fada0a' } }}
+              >
+                카카오
+              </Button>
+            </AnimateButton>
+          </Stack>
+        </Grid>
+
+        {/* 구분선 */}
+        <Grid item xs={12}>
+          <Divider>
+            <Typography variant="caption">또는 이메일로 가입</Typography>
+          </Divider>
+        </Grid>
+
+        {/* 기존 회원가입 폼 */}
+        <Grid item xs={12}>
+          <Formik
+            initialValues={{
+              firstname: '',
+              email: '',
+              password: '',
+              submit: null
+            }}
+            validationSchema={Yup.object().shape({
+              firstname: Yup.string().max(255).required('성함은 필수 입력입니다.'),
+              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              password: Yup.string()
+                .required('Password is required')
+                .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
+                .max(10, 'Password must be less than 10 characters')
+            })}
+          >
+            {({ errors, handleBlur, handleChange, touched, values }) => (
+              <form noValidate>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} md={6}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="firstname-signup">성함*</InputLabel>
+                      <OutlinedInput
+                        id="firstname-login"
+                        type="firstname"
+                        value={values.firstname}
+                        name="firstname"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder="신짱구"
+                        fullWidth
+                        error={Boolean(touched.firstname && errors.firstname)}
+                      />
+                    </Stack>
+                    {touched.firstname && errors.firstname && (
+                      <FormHelperText error id="helper-text-firstname-signup">
+                        {errors.firstname}
+                      </FormHelperText>
+                    )}
                   </Grid>
-                </FormControl>
-              </Grid>
-              <Grid size={12}>
-                <Typography variant="body2">
-                  By Signing up, you agree to our &nbsp;
-                  <Link variant="subtitle2" component={RouterLink} to="#">
-                    Terms of Service
-                  </Link>
-                  &nbsp; and &nbsp;
-                  <Link variant="subtitle2" component={RouterLink} to="#">
-                    Privacy Policy
-                  </Link>
-                </Typography>
-              </Grid>
-              {errors.submit && (
-                <Grid size={12}>
-                  <FormHelperText error>{errors.submit}</FormHelperText>
+                  <Grid item xs={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="email-signup">이메일*</InputLabel>
+                      <OutlinedInput
+                        fullWidth
+                        error={Boolean(touched.email && errors.email)}
+                        id="email-login"
+                        type="email"
+                        value={values.email}
+                        name="email"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        placeholder="abc123@example.com"
+                      />
+                    </Stack>
+                    {touched.email && errors.email && (
+                      <FormHelperText error id="helper-text-email-signup">
+                        {errors.email}
+                      </FormHelperText>
+                    )}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Stack spacing={1}>
+                      <InputLabel htmlFor="password-signup">비밀번호</InputLabel>
+                      <OutlinedInput
+                        fullWidth
+                        error={Boolean(touched.password && errors.password)}
+                        id="password-signup"
+                        type={showPassword ? 'text' : 'password'}
+                        value={values.password}
+                        name="password"
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          handleChange(e);
+                          changePassword(e.target.value);
+                        }}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                              color="secondary"
+                            >
+                              {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        placeholder="******"
+                      />
+                    </Stack>
+                    {touched.password && errors.password && (
+                      <FormHelperText error id="helper-text-password-signup">
+                        {errors.password}
+                      </FormHelperText>
+                    )}
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid item>
+                          <Box sx={{ bgcolor: level?.color, width: 85, height: 8, borderRadius: '7px' }} />
+                        </Grid>
+                        <Grid item>
+                          <Typography variant="subtitle1" fontSize="0.75rem">
+                            {level?.label}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography variant="body2">
+                      가입함으로써 귀하는 당사의 &nbsp;
+                      <Link variant="subtitle2" component={RouterLink} to="#">
+                        서비스 약관
+                      </Link>
+                      &nbsp; 및 &nbsp;
+                      <Link variant="subtitle2" component={RouterLink} to="#">
+                        개인정보 처리방침
+                      </Link>에 동의하게 됩니다.
+                    </Typography>
+                  </Grid>
+                  {errors.submit && (
+                    <Grid item xs={12}>
+                      <FormHelperText error>{errors.submit}</FormHelperText>
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <AnimateButton>
+                      <Button fullWidth size="large" variant="contained" color="primary" type="submit">
+                        계정 만들기
+                      </Button>
+                    </AnimateButton>
+                  </Grid>
                 </Grid>
-              )}
-              <Grid size={12}>
-                <AnimateButton>
-                  <Button fullWidth size="large" variant="contained" color="primary">
-                    Create Account
-                  </Button>
-                </AnimateButton>
-              </Grid>
-            </Grid>
-          </form>
-        )}
-      </Formik>
+              </form>
+            )}
+          </Formik>
+        </Grid>
+      </Grid>
     </>
   );
 }
