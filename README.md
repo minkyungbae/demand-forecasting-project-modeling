@@ -1,27 +1,4 @@
-# 수요 예측 모델 개발
----
-- 사용한 모델 : RandomForest, ARIMA, RandomForest + ARIMA, LSTM,  RandomForest + ARIMA + LSTM, Boosting(XGboost, LightGBM)
-- 최종 선택한 모델 : RandomForest + ARIMA
-- 사용하는 데이터셋 : [Blinkit Sales Dataset]("https://www.kaggle.com/datasets/akxiit/blinkit-sales-dataset?select=blinkit_order_items.csv")
-- 사용하는 API : Open-Meteo(날씨 정보 데이터)
----
-## 데이터셋 개요
-- 제품 상세 정보, 주문 수량, 매출액, 타임스탬프 등 Blinkit의 판매 데이터가 포함되어 있습니다.
-- 온라인 식료품 쇼핑에서 고객 행동 및 계절적 변동을 이해하는 데 도움이 됩니다.
----
-## 날씨 데이터
-> 본 프로젝트에서는 Open-Meteo Archive API를 활용하여 인도 주요 도시의 2023–2024 기상 데이터를 수집하고, 일 단위 시계열 데이터를 월별로 리샘플링하여 수요 예측 모델의 외생 변수로 활용.
-- 사용 API 👉 Open-Meteo – Archive API
-- 선택한 이유
-    - API Key 없이 사용 가능하다.
-    - 무료이지만 제한이 없다.
-        - 과거 데이터 수집에도 제한이 없다.
-    - 연구/상업적 사용에도 가능하다.
----
-## 컴포넌트 출처
-[React Component from](https://github.com/codedthemes/mantis-free-react-admin-template)
----
-## 폴더 구조
+
 ```
 demand-forecasting-project-modeling
 ├─ README.md
@@ -29,10 +6,12 @@ demand-forecasting-project-modeling
 │  ├─ API
 │  │  └─ weather_api.ipynb
 │  ├─ features
+│  │  ├─ __init__.py
 │  │  ├─ time_features.ipynb
 │  │  └─ time_features.py
 │  ├─ main.py
 │  ├─ models
+│  │  ├─ __init__.py
 │  │  ├─ check
 │  │  │  ├─ baseline_model_code.ipynb
 │  │  │  └─ demand_code.ipynb
@@ -44,19 +23,185 @@ demand-forecasting-project-modeling
 ├─ documents
 │  └─ command.txt
 ├─ frontend
-│  ├─ ...
+│  ├─ .env
+│  ├─ .prettierrc
+│  ├─ .yarnrc.yml
+│  ├─ CODE_OF_CONDUCT.md
+│  ├─ LICENSE
+│  ├─ README.md
+│  ├─ eslint.config.mjs
+│  ├─ favicon.svg
+│  ├─ index.html
+│  ├─ jsconfig.json
+│  ├─ jsconfig.node.json
+│  ├─ package-lock.json
+│  ├─ package.json
 │  ├─ src
-│  │  ├─ ...
 │  │  ├─ App.jsx
-│  │  └─ ...
-│  └─ ...
+│  │  ├─ api
+│  │  │  └─ menu.js
+│  │  ├─ assets
+│  │  │  ├─ images
+│  │  │  │  └─ users
+│  │  │  │     ├─ avatar-1.png
+│  │  │  │     ├─ avatar-2.png
+│  │  │  │     ├─ avatar-3.png
+│  │  │  │     ├─ avatar-4.png
+│  │  │  │     ├─ avatar-5.png
+│  │  │  │     └─ avatar-group.png
+│  │  │  ├─ style.css
+│  │  │  └─ third-party
+│  │  │     ├─ apex-chart.css
+│  │  │     └─ react-table.css
+│  │  ├─ components
+│  │  │  ├─ @extended
+│  │  │  │  ├─ AnimateButton.jsx
+│  │  │  │  ├─ Avatar.jsx
+│  │  │  │  ├─ Breadcrumbs.jsx
+│  │  │  │  ├─ Dot.jsx
+│  │  │  │  ├─ IconButton.jsx
+│  │  │  │  └─ Transitions.jsx
+│  │  │  ├─ Loadable.jsx
+│  │  │  ├─ Loader.jsx
+│  │  │  ├─ MainCard.jsx
+│  │  │  ├─ ScrollTop.jsx
+│  │  │  ├─ cards
+│  │  │  │  ├─ AuthFooter.jsx
+│  │  │  │  └─ statistics
+│  │  │  │     └─ AnalyticEcommerce.jsx
+│  │  │  ├─ logo
+│  │  │  │  ├─ LogoIcon.jsx
+│  │  │  │  ├─ LogoMain.jsx
+│  │  │  │  └─ index.jsx
+│  │  │  └─ third-party
+│  │  │     └─ SimpleBar.jsx
+│  │  ├─ config.js
+│  │  ├─ contexts
+│  │  │  ├─ ConfigContext.jsx
+│  │  │  └─ README.md
+│  │  ├─ data
+│  │  │  └─ README.md
+│  │  ├─ hooks
+│  │  │  ├─ README.md
+│  │  │  ├─ useConfig.js
+│  │  │  └─ useLocalStorage.js
+│  │  ├─ index.jsx
+│  │  ├─ layout
+│  │  │  ├─ Auth
+│  │  │  │  └─ index.jsx
+│  │  │  └─ Dashboard
+│  │  │     ├─ Drawer
+│  │  │     │  ├─ DrawerContent
+│  │  │     │  │  ├─ NavCard.jsx
+│  │  │     │  │  ├─ Navigation
+│  │  │     │  │  │  ├─ NavGroup.jsx
+│  │  │     │  │  │  ├─ NavItem.jsx
+│  │  │     │  │  │  └─ index.jsx
+│  │  │     │  │  └─ index.jsx
+│  │  │     │  ├─ DrawerHeader
+│  │  │     │  │  ├─ DrawerHeaderStyled.js
+│  │  │     │  │  └─ index.jsx
+│  │  │     │  ├─ MiniDrawerStyled.js
+│  │  │     │  └─ index.jsx
+│  │  │     ├─ Footer.jsx
+│  │  │     ├─ Header
+│  │  │     │  ├─ AppBarStyled.jsx
+│  │  │     │  ├─ HeaderContent
+│  │  │     │  │  ├─ MobileSection.jsx
+│  │  │     │  │  ├─ Notification.jsx
+│  │  │     │  │  ├─ Profile
+│  │  │     │  │  │  ├─ ProfileTab.jsx
+│  │  │     │  │  │  ├─ SettingTab.jsx
+│  │  │     │  │  │  └─ index.jsx
+│  │  │     │  │  ├─ Search.jsx
+│  │  │     │  │  └─ index.jsx
+│  │  │     │  └─ index.jsx
+│  │  │     └─ index.jsx
+│  │  ├─ menu-items
+│  │  │  ├─ dashboard.jsx
+│  │  │  ├─ index.jsx
+│  │  │  ├─ page.jsx
+│  │  │  ├─ support.jsx
+│  │  │  └─ utilities.jsx
+│  │  ├─ pages
+│  │  │  ├─ auth
+│  │  │  │  ├─ Login.jsx
+│  │  │  │  └─ Register.jsx
+│  │  │  ├─ component-overview
+│  │  │  │  ├─ color.jsx
+│  │  │  │  ├─ shadows.jsx
+│  │  │  │  └─ typography.jsx
+│  │  │  ├─ dashboard
+│  │  │  │  └─ default.jsx
+│  │  │  └─ extra-pages
+│  │  │     └─ sample-page.jsx
+│  │  ├─ reportWebVitals.js
+│  │  ├─ routes
+│  │  │  ├─ LoginRoutes.jsx
+│  │  │  ├─ MainRoutes.jsx
+│  │  │  └─ index.jsx
+│  │  ├─ sections
+│  │  │  ├─ auth
+│  │  │  │  ├─ AuthBackground.jsx
+│  │  │  │  ├─ AuthCard.jsx
+│  │  │  │  ├─ AuthLogin.jsx
+│  │  │  │  ├─ AuthRegister.jsx
+│  │  │  │  └─ AuthWrapper.jsx
+│  │  │  └─ dashboard
+│  │  │     ├─ SalesChart.jsx
+│  │  │     └─ default
+│  │  │        ├─ IncomeAreaChart.jsx
+│  │  │        ├─ MonthlyBarChart.jsx
+│  │  │        ├─ OrdersTable.jsx
+│  │  │        ├─ ReportAreaChart.jsx
+│  │  │        ├─ SaleReportCard.jsx
+│  │  │        └─ UniqueVisitorCard.jsx
+│  │  ├─ themes
+│  │  │  ├─ custom-shadows.jsx
+│  │  │  ├─ index.jsx
+│  │  │  ├─ overrides
+│  │  │  │  ├─ Badge.js
+│  │  │  │  ├─ Button.js
+│  │  │  │  ├─ ButtonBase.js
+│  │  │  │  ├─ CardContent.js
+│  │  │  │  ├─ Checkbox.jsx
+│  │  │  │  ├─ Chip.js
+│  │  │  │  ├─ Drawer.js
+│  │  │  │  ├─ FormHelperText.js
+│  │  │  │  ├─ IconButton.js
+│  │  │  │  ├─ InputLabel.js
+│  │  │  │  ├─ LinearProgress.js
+│  │  │  │  ├─ Link.js
+│  │  │  │  ├─ ListItemButton.jsx
+│  │  │  │  ├─ ListItemIcon.jsx
+│  │  │  │  ├─ OutlinedInput.js
+│  │  │  │  ├─ Tab.js
+│  │  │  │  ├─ TableBody.js
+│  │  │  │  ├─ TableCell.js
+│  │  │  │  ├─ TableHead.js
+│  │  │  │  ├─ TableRow.js
+│  │  │  │  ├─ Tabs.js
+│  │  │  │  ├─ Tooltip.js
+│  │  │  │  ├─ Typography.js
+│  │  │  │  └─ index.js
+│  │  │  ├─ palette.js
+│  │  │  ├─ theme
+│  │  │  │  └─ index.js
+│  │  │  └─ typography.js
+│  │  ├─ utils
+│  │  │  ├─ colorUtils.js
+│  │  │  ├─ getColors.js
+│  │  │  ├─ getShadow.js
+│  │  │  ├─ password-strength.js
+│  │  │  └─ password-validation.js
+│  │  └─ vite-env.d.js
+│  ├─ vite.config.mjs
+│  └─ yarn.lock
 ├─ function
 │  └─ eda
 │     ├─ eda_blinkit_master_data.ipynb
 │     └─ eda_weather.ipynb
+├─ old_README.md
 └─ requirements.txt
 
 ```
----
-## 문서 정리
-[Notion](https://www.notion.so/4-Blinkit-2c79e2888600801cabeed6b004a92719?source=copy_link)

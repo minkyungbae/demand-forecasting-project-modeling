@@ -9,4 +9,11 @@ blinkit-dataset/
 weather/
 
 # React 이전 프로젝트
-old_frontend
+old_frontend/
+
+# React 원본 컨포넌트 코드
+old_AuthRegister.jsx
+
+# old README.md
+old_README.md
+
