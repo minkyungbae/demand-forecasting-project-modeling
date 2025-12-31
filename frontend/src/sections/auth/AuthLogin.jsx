@@ -45,14 +45,14 @@ export default function AuthLogin({ isDemo = false }) {
     <>
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
+          email: 'abc123@excample.com',
           password: '123456',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          email: Yup.string().email('Must be a valid email').max(255).required('이메일 입력은 필수입니다.'),
           password: Yup.string()
-            .required('Password is required')
+            .required('비밀번호 입력은 필수입니다.')
             .test('no-leading-trailing-whitespace', 'Password cannot start or end with spaces', (value) => value === value.trim())
             .max(10, 'Password must be less than 10 characters')
         })}
@@ -62,7 +62,7 @@ export default function AuthLogin({ isDemo = false }) {
             <Grid container spacing={3}>
               <Grid size={12}>
                 <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">이메일 주소</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -72,7 +72,7 @@ export default function AuthLogin({ isDemo = false }) {
                     onChange={handleChange}
                     placeholder="Enter email address"
                     fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.email && errors.email)} 
                   />
                 </Stack>
                 {touched.email && errors.email && (
@@ -83,7 +83,7 @@ export default function AuthLogin({ isDemo = false }) {
               </Grid>
               <Grid size={12}>
                 <Stack sx={{ gap: 1 }}>
-                  <InputLabel htmlFor="password-login">Password</InputLabel>
+                  <InputLabel htmlFor="password-login">비밀번호</InputLabel>
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
@@ -127,17 +127,17 @@ export default function AuthLogin({ isDemo = false }) {
                         size="small"
                       />
                     }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
+                    label={<Typography variant="h6">로그인된 상태 유지하기</Typography>}
                   />
                   <Link variant="h6" component={RouterLink} to="#" color="text.primary">
-                    Forgot Password?
+                    비밀번호를 잊으셨나요?
                   </Link>
                 </Stack>
               </Grid>
               <Grid size={12}>
                 <AnimateButton>
                   <Button fullWidth size="large" variant="contained" color="primary">
-                    Login
+                    로그인
                   </Button>
                 </AnimateButton>
               </Grid>
