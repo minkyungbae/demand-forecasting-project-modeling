@@ -60,3 +60,4 @@ dev 서버 시작
 
 다시 실행
 npm run dev
+npm run start
