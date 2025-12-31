@@ -34,17 +34,38 @@ export default function AuthRegister() {
   const [level, setLevel] = useState();
   const [showPassword, setShowPassword] = useState(false);
 
-  // 소셜 로그인 리다이렉트 핸들러
-  const handleSocialLogin = (platform) => {
-    const SOCIAL_AUTH_URLS = {
-      google: 'https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_ID&redirect_uri=YOUR_URL&response_type=code&scope=email profile',
-      naver: 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=YOUR_NAVER_ID&redirect_uri=YOUR_URL&state=STATE_STRING',
-      kakao: 'https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_ID&redirect_uri=YOUR_URL&response_type=code'
-    };
+  {/* 보안 문제로 API키를 발급받아야 제공할 수 있어서 기능 구현 멈추었음. 25년 12월 31일 */}
+  // // 소셜 로그인 리다이렉트 핸들러
+  // const handleSocialLogin = (platform) => {
+  //   const currentDomain = window.location.origin; // 현재 접속한 주소 (localhost 혹은 실제 도메인)
+  //   const redirectUri = `${currentDomain}/login/callback`; // 가입 완료 후 돌아올 주소
 
-    // 해당 플랫폼의 로그인 페이지로 바로 이동
-    window.location.href = SOCIAL_AUTH_URLS[platform];
-  };
+  //   let authUrl = '';
+
+  //   switch (platform) {
+  //     case 'google':
+  //       // 구글 로그인 화면으로 이동
+  //       authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=YOUR_GOOGLE_CLIENT_ID&redirect_uri=${redirectUri}&response_type=token&scope=email profile`;
+  //       break;
+  //     case 'naver':
+  //       // 네이버 로그인 화면으로 이동
+  //       authUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=YOUR_NAVER_CLIENT_ID&redirect_uri=${redirectUri}&state=RANDOM_STATE`;
+  //       break;
+  //     case 'kakao':
+  //       // 카카오 로그인 화면으로 이동
+  //       authUrl = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_CLIENT_ID&redirect_uri=${redirectUri}&response_type=code`;
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   // 실제 키값이 입력되지 않았을 경우 안내
+  //   if (authUrl.includes('YOUR_')) {
+  //     alert(`${platform} 개발자 센터에서 발급받은 실제 Client ID를 코드에 넣어야 사용자들이 가입할 수 있습니다.`);
+  //   } else {
+  //     window.location.href = authUrl;
+  //   }
+  // };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -66,52 +87,6 @@ export default function AuthRegister() {
   return (
     <>
       <Grid container spacing={3}>
-        {/* 소셜 로그인 버튼 섹션 */}
-        <Grid item xs={12}>
-          <Stack direction="column" spacing={2}>
-            <AnimateButton>
-              <Button
-                fullWidth
-                size="large"
-                variant="outlined"
-                color="secondary"
-                onClick={() => handleSocialLogin('google')}
-                sx={{ mb: 1 }}
-              >
-                Google
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button
-                fullWidth
-                size="large"
-                variant="outlined"
-                onClick={() => handleSocialLogin('naver')}
-                sx={{ mb: 1, color: '#03C75A', borderColor: '#03C75A', '&:hover': { borderColor: '#02b350', bgcolor: '#f0fff5' } }}
-              >
-                네이버
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button
-                fullWidth
-                size="large"
-                variant="outlined"
-                onClick={() => handleSocialLogin('kakao')}
-                sx={{ color: '#3C1E1E', borderColor: '#FEE500', bgcolor: '#FEE500', '&:hover': { bgcolor: '#fada0a', borderColor: '#fada0a' } }}
-              >
-                카카오
-              </Button>
-            </AnimateButton>
-          </Stack>
-        </Grid>
-
-        {/* 구분선 */}
-        <Grid item xs={12}>
-          <Divider>
-            <Typography variant="caption">또는 이메일로 가입</Typography>
-          </Divider>
-        </Grid>
 
         {/* 기존 회원가입 폼 */}
         <Grid item xs={12}>
@@ -253,6 +228,83 @@ export default function AuthRegister() {
               </form>
             )}
           </Formik>
+        </Grid>
+
+        {/* 소셜 로그인 버튼 섹션 */}
+        <Grid item xs={12}>
+          {/* 화면에 구분선 추가 */}
+          <Divider sx={{ my: 1 }}>
+            <Typography variant="caption" color="textSecondary">
+              또는 다음으로 로그인
+            </Typography>
+          </Divider>
+
+          <Stack 
+            direction="row"           // 가로 방향 나열
+            spacing={3}               // 버튼 사이 간격
+            justifyContent="center"   // 중앙 정렬
+            alignItems="center"
+            sx={{ mt: 2, mb: 2 }}     // 상하 여백 (필요시)
+          >
+            {/* Google 버튼 */}
+            <AnimateButton>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => handleSocialLogin('google')}
+                sx={{ 
+                  minWidth: '55px', 
+                  width: '110px', 
+                  height: '55px', 
+                  borderRadius: '5%', // 동그랗게 만들기
+                  p: 0
+                }}
+              >
+                Google
+              </Button>
+            </AnimateButton>
+
+            {/* 네이버 버튼 */}
+            <AnimateButton>
+              <Button
+                variant="outlined"
+                onClick={() => handleSocialLogin('naver')}
+                sx={{ 
+                  minWidth: '55px', 
+                  width: '110px', 
+                  height: '55px', 
+                  borderRadius: '5%',
+                  color: '#03C75A', 
+                  borderColor: '#03C75A', 
+                  '&:hover': { borderColor: '#02b350', bgcolor: '#f0fff5' },
+                  p: 0
+                }}
+              >
+                Naver
+              </Button>
+            </AnimateButton>
+
+            {/* 카카오 버튼 */}
+            <AnimateButton>
+              <Button
+                variant="outlined"
+                onClick={() => handleSocialLogin('kakao')}
+                sx={{ 
+                  minWidth: '55px', 
+                  width: '110px', 
+                  height: '55px', 
+                  borderRadius: '5%',
+                  color: '#3C1E1E', 
+                  borderColor: '#FEE500', 
+                  bgcolor: '#FEE500', 
+                  '&:hover': { bgcolor: '#fada0a', borderColor: '#fada0a' },
+                  p: 0
+                }}
+              >
+                Kakao
+              </Button>
+            </AnimateButton>
+          </Stack>
         </Grid>
       </Grid>
     </>
