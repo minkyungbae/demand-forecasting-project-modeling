@@ -4,9 +4,11 @@ import React from 'react';
 interface SidebarProps {
   currentStep: number;
   onDashboardClick?: () => void;
+  onStepOneClick?: () => void;
+  onStepTwoClick?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick, onStepOneClick, onStepTwoClick }) => {
   const mainMenus = [
     { title: 'ForeCastly', active: true, onClick: onDashboardClick },
     { title: '로그인' },
@@ -14,8 +16,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick 
   ];
 
   const functions = [
-    { step: 1, label: '파일 업로드 및 분석' },
-    { step: 2, label: '모델 예측' },
+    { step: 1, label: '파일 업로드 및 분석', onClick: onStepOneClick },
+    { step: 2, label: '모델 예측', onClick: onStepTwoClick },
     { step: 3, label: '솔루션 결과' },
   ];
 
@@ -28,14 +30,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick 
       </div>
 
       <div className="flex-1 py-6 overflow-y-auto">
-        {/* Main Sections */}
         <div className="px-3 space-y-1">
-          <p className="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2"></p>
           {mainMenus.map((menu, i) => (
             <button 
               key={i} 
               onClick={menu.onClick}
-              className={`w-full flex items-center justify-between px-4 py-2.5 rounded transition-all hover:bg-gray-700 group ${menu.active ? 'bg-[#1677ff] text-white shadow-md' : 'text-gray-300'}`}
+              className={`w-full flex items-center justify-between px-4 py-2.5 rounded transition-all hover:bg-gray-700 group ${menu.active && currentStep === 0 ? 'bg-[#1677ff] text-white shadow-md' : 'text-gray-300'}`}
             >
               <div className="flex items-center gap-3">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -45,23 +45,25 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick 
           ))}
         </div>
 
-        {/* Function Section */}
         <div className="mt-10">
           <p className="px-7 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Function</p>
           <div className="px-3 space-y-1">
             {functions.map((fn) => (
-              <div key={fn.step} className={`flex items-center gap-3 px-4 py-3 rounded border-l-4 transition-all ${currentStep === fn.step ? 'bg-gray-800/50 border-[#1677ff] text-white' : 'border-transparent text-gray-400 opacity-60'}`}>
-                <span className={`w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold ${currentStep === fn.step ? 'bg-[#1677ff] text-white' : 'bg-gray-700 text-gray-500'}`}>
+              <button 
+                key={fn.step} 
+                onClick={fn.onClick}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded border-l-4 transition-all text-left ${currentStep === fn.step ? 'bg-gray-800/50 border-[#1677ff] text-white shadow-sm' : 'border-transparent text-white hover:bg-gray-700/30'}`}
+              >
+                <span className={`w-5 h-5 flex-shrink-0 rounded-full flex items-center justify-center text-[10px] font-bold bg-[#1677ff] text-white shadow-[0_0_10px_rgba(22,119,255,0.3)] ${currentStep === fn.step ? 'ring-2 ring-primary-light ring-offset-1 ring-offset-[#2c384a]' : ''}`}>
                   {fn.step}
                 </span>
-                <span className="text-[12px] whitespace-nowrap">{fn.step}단계 : {fn.label}</span>
-              </div>
+                <span className="text-[12px] whitespace-nowrap font-medium">{fn.step}단계 : {fn.label}</span>
+              </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Footer Toggle */}
       <div className="p-4 border-t border-gray-700 text-center flex-shrink-0">
         <button className="text-gray-500 hover:text-white transition-colors">
           <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="mx-auto">
