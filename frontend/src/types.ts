@@ -6,22 +6,42 @@ export interface ProductData {
     [key: string]: any; // 기타 동적 컬럼 대응
   }
   
-  export interface FilePayload {
-    data: ProductData[];
-    headers: string[];
-  }
-  
-  export interface AnalyticsSummary {
-    totalSales: number;
-    totalQuantity: number;
-    topProduct: string;
-    aiInsights: string;
-  }
-  
-  export interface UserProfile {
-    user_id: string;
-    email: string;
+export interface FilePayload {
+  data: ProductData[];
+  headers: string[];
+}
+
+export interface AnalyticsSummary {
+  totalSales: number;
+  totalQuantity: number;
+  topProduct: string;
+  aiInsights: string;
+}
+
+export interface UserProfile {
+  user_id: string;
+  email: string;
+  name: string;
+  user_type: 'Basic' | 'Premium' | 'Admin';
+  created_at: string;
+}
+
+// 회원가입 요청
+export interface RegisterPayload {
+  username: string; // email
+  password: string;
+  name: string;
+  user_type?: 'admin' | 'premium' | 'basic';
+}
+
+// 회원가입 응답
+export interface AuthResponse {
+  access_token: string;
+  token_type?: string;
+  user: {
+    id: number;
+    username: string;
     name: string;
-    user_type: 'Basic' | 'Premium' | 'Admin';
-    created_at: string;
-  }
+    user_type: string;
+  };
+}
