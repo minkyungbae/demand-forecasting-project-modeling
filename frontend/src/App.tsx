@@ -283,7 +283,7 @@ const App: React.FC = () => {
               ) : (
                 <SolutionView data={data} selectedColumn={selectedColumn} />
               )}
-           </div>
+            </div>
         )}
       </div>
     </DashboardLayout>
