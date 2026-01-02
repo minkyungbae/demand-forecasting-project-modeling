@@ -20,7 +20,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children, 
   currentStep, 
   userProfile,
-  onDashboardClick,
+  onDashboardClick,   
   onStepOneClick,
   onStepTwoClick,
   onStepThreeClick,
