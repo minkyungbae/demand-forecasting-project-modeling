@@ -68,18 +68,20 @@ const App: React.FC = () => {
     }
   };
 
-  const handleLoginSuccess = (username: string) => {
+  const handleLoginSuccess = (userData: any) => {
     setIsLoggedIn(true);
-    // 로그인 시 시뮬레이션된 프로필 정보 설정
-    setUserProfile({
-      user_id: 'user_' + Math.random().toString(36).substr(2, 9),
-      email: `${username.toLowerCase()}@example.com`,
-      name: username,
-      user_type: 'Premium', // 기본적으로 프리미엄 등급으로 설정
-      created_at: new Date().toISOString()
-    });
     
-    alert(`${username}님, 환영합니다!`);
+    // API 응답 데이터가 user_id, email, name, user_type 등을 포함한다고 가정
+    const profile: UserProfile = {
+      user_id: userData.user_id || 'unknown',
+      email: userData.email || '',
+      name: userData.name || 'User',
+      user_type: userData.user_type || 'Basic',
+      created_at: userData.created_at || new Date().toISOString()
+    };
+    
+    setUserProfile(profile);
+    alert(`${profile.name}님, 환영합니다!`);
     
     if (data.length > 0 && selectedColumn) {
       setViewMode('solution');
@@ -283,7 +285,7 @@ const App: React.FC = () => {
               ) : (
                 <SolutionView data={data} selectedColumn={selectedColumn} />
               )}
-            </div>
+           </div>
         )}
       </div>
     </DashboardLayout>
