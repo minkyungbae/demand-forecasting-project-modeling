@@ -6,9 +6,10 @@ import { FileUpload } from './components/FileUpload';
 import { IntroView } from './components/IntroView';
 import { SolutionView } from './components/SolutionView';
 import { LoginView } from './components/LoginView';
+import { SignupView } from './components/SignupView';
 import type{ ProductData, FilePayload } from './types';
 
-type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution' | 'login';
+type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution' | 'login' | 'signup';
 
 const App: React.FC = () => {
   const [data, setData] = useState<ProductData[]>([]);
@@ -72,12 +73,16 @@ const App: React.FC = () => {
     setUserName(username);
     alert(`${username}님, 환영합니다!`);
     
-    // 이전에 보려던 화면이 솔루션이었다면 그리로 이동
     if (data.length > 0 && selectedColumn) {
       setViewMode('solution');
     } else {
       setViewMode('intro');
     }
+  };
+
+  const handleSignupSuccess = () => {
+    alert('회원가입이 완료되었습니다. 로그인해주세요.');
+    setViewMode('login');
   };
 
   const startPrediction = () => {
@@ -101,9 +106,9 @@ const App: React.FC = () => {
       onStepTwoClick={handleStepTwoClick}
       onStepThreeClick={handleStepThreeClick}
       onLoginClick={() => setViewMode('login')}
+      onSignupClick={() => setViewMode('signup')}
     >
       <div className="space-y-6">
-        {/* Breadcrumb Info */}
         <div className="flex items-center gap-2 text-[13px] text-gray-500">
           <span className="text-primary-main hover:underline cursor-pointer" onClick={() => setViewMode('intro')}>Home</span>
           <span className="text-gray-300">/</span>
@@ -121,6 +126,14 @@ const App: React.FC = () => {
           <LoginView 
             onLoginSuccess={handleLoginSuccess} 
             onCancel={() => setViewMode('intro')} 
+          />
+        )}
+
+        {viewMode === 'signup' && (
+          <SignupView 
+            onSignupSuccess={handleSignupSuccess}
+            onCancel={() => setViewMode('intro')}
+            onLoginClick={() => setViewMode('login')}
           />
         )}
 
@@ -159,7 +172,6 @@ const App: React.FC = () => {
 
             <DataDashboard data={data} />
             
-            {/* 컬럼 선택 및 예측 섹션 */}
             <div className="bg-white rounded-xl shadow-sm border border-[#d8dbe0] overflow-hidden">
               <div className="bg-[#f8f9fa] border-b border-[#d8dbe0] px-6 py-4">
                 <h2 className="text-sm font-bold text-gray-700 uppercase tracking-tight">2단계 : 모델 예측 설정</h2>
@@ -212,7 +224,6 @@ const App: React.FC = () => {
 
         {(viewMode === 'predict' || viewMode === 'solution') && (
            <div className="space-y-6">
-              {/* 공통 헤더 */}
               <div className="bg-white p-6 rounded-lg border border-[#d8dbe0] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-800">{viewMode === 'predict' ? '2단계 : 예측 결과' : '3단계 : 최종 솔루션'}</h1>
@@ -234,7 +245,6 @@ const App: React.FC = () => {
                     <svg className="w-10 h-10 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <h1 className="text-2xl font-black text-gray-800">예측 분석이 완료되었습니다!</h1>
-                  
                   <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                     <div className="p-6 bg-[#f8f9fa] rounded-lg border border-gray-100">
                       <h3 className="font-bold text-gray-700 mb-3">💡 예측 인사이트</h3>
