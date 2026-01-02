@@ -18,3 +18,10 @@ export interface ProductData {
     aiInsights: string;
   }
   
+  export interface UserProfile {
+    user_id: string;
+    email: string;
+    name: string;
+    user_type: 'Basic' | 'Premium' | 'Admin';
+    created_at: string;
+  }
