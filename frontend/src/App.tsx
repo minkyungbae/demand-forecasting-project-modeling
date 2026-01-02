@@ -4,9 +4,10 @@ import { DashboardLayout } from './components/DashboardLayout';
 import { DataDashboard } from './components/DataDashboard';
 import { FileUpload } from './components/FileUpload';
 import { IntroView } from './components/IntroView';
+import { SolutionView } from './components/SolutionView';
 import type{ ProductData, FilePayload } from './types';
 
-type ViewMode = 'intro' | 'upload' | 'result' | 'predict';
+type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution';
 
 const App: React.FC = () => {
   const [data, setData] = useState<ProductData[]>([]);
@@ -14,10 +15,12 @@ const App: React.FC = () => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('intro');
   const [isPredicting, setIsPredicting] = useState(false);
+  
+  // 로그인 체크를 위한 상태 (기본 false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleDataLoaded = useCallback((payload: FilePayload) => {
     setData(payload.data);
-    // 한 번 더 헤더 클리닝 (보이지 않는 제어 문자 및 BOM 제거)
     const cleanedHeaders = payload.headers.map(h => 
       h.replace(/[\u0000-\u001F\u007F-\u009F\uFEFF\u200B-\u200D]/g, '').trim()
     );
@@ -44,10 +47,40 @@ const App: React.FC = () => {
     else alert('먼저 데이터를 업로드해주세요.');
   };
 
+  const handleStepThreeClick = () => {
+    // 3단계 진입 전 로그인 체크
+    if (!isLoggedIn) {
+      const confirmLogin = window.confirm('3단계 결과는 회원만 확인 가능합니다. 로그인(시뮬레이션) 하시겠습니까?');
+      if (confirmLogin) {
+        setIsLoggedIn(true);
+        alert('로그인되었습니다. 이제 3단계 결과를 확인할 수 있습니다.');
+        // 로그인 성공 후 자동으로 3단계 이동
+        if (data.length > 0 && selectedColumn) {
+          setViewMode('solution');
+        } else if (data.length > 0) {
+          setViewMode('predict');
+          alert('먼저 예측하고 싶은 컬럼을 선택해주세요.');
+        } else {
+          setViewMode('upload');
+        }
+      }
+      return;
+    }
+
+    if (data.length === 0) {
+      alert('먼저 데이터를 업로드해주세요.');
+      setViewMode('upload');
+    } else if (!selectedColumn) {
+      alert('먼저 2단계에서 예측 대상 컬럼을 선택하고 예측을 진행해주세요.');
+      setViewMode('result');
+    } else {
+      setViewMode('solution');
+    }
+  };
+
   const startPrediction = () => {
     if (!selectedColumn) return;
     setIsPredicting(true);
-    // AI 모델 예측 시뮬레이션
     setTimeout(() => {
       setIsPredicting(false);
       setViewMode('predict');
@@ -56,10 +89,14 @@ const App: React.FC = () => {
 
   return (
     <DashboardLayout 
-      currentStep={viewMode === 'result' || viewMode === 'upload' ? 1 : (viewMode === 'predict' ? 2 : 0)} 
+      currentStep={
+        viewMode === 'result' || viewMode === 'upload' ? 1 : 
+        (viewMode === 'predict' ? 2 : (viewMode === 'solution' ? 3 : 0))
+      } 
       onDashboardClick={goToDashboard}
       onStepOneClick={handleStepOneClick}
       onStepTwoClick={handleStepTwoClick}
+      onStepThreeClick={handleStepThreeClick}
     >
       <div className="space-y-6">
         {/* Breadcrumb Info */}
@@ -67,6 +104,9 @@ const App: React.FC = () => {
           <span className="text-primary-main hover:underline cursor-pointer" onClick={() => setViewMode('intro')}>Home</span>
           <span className="text-gray-300">/</span>
           <span className="font-semibold text-gray-800 capitalize">{viewMode}</span>
+          {isLoggedIn && (
+            <span className="ml-auto bg-green-100 text-green-600 px-2 py-0.5 rounded text-[10px] font-bold">LOGGED IN</span>
+          )}
         </div>
 
         {viewMode === 'intro' && (
@@ -159,42 +199,54 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {viewMode === 'predict' && (
-          <div className="space-y-6 animate-in zoom-in-95 duration-500">
-            <div className="bg-white p-8 rounded-xl border border-primary-light shadow-xl text-center">
-              <div className="w-20 h-20 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-              </div>
-              <h1 className="text-2xl font-black text-gray-800">예측 분석이 완료되었습니다!</h1>
-              <p className="text-gray-500 mt-2">선택한 컬럼: <span className="text-primary-main font-bold">[{selectedColumn}]</span></p>
-              
-              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                <div className="p-6 bg-[#f8f9fa] rounded-lg border border-gray-100">
-                  <h3 className="font-bold text-gray-700 mb-3">💡 예측 인사이트</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    '{selectedColumn}' 데이터를 기반으로 모델이 학습을 마쳤습니다. 향후 3개월간 해당 지표는 
-                    판매 패턴과 계절적 요인에 의해 약 <span className="text-green-600 font-bold">12.5% 상승</span>할 것으로 예측됩니다.
+        {(viewMode === 'predict' || viewMode === 'solution') && (
+           <div className="space-y-6">
+              {/* 공통 헤더 */}
+              <div className="bg-white p-6 rounded-lg border border-[#d8dbe0] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-800">{viewMode === 'predict' ? '2단계 : 예측 결과' : '3단계 : 최종 솔루션'}</h1>
+                  <p className="text-sm text-gray-500 mt-1">
+                    타겟 컬럼: <span className="font-bold text-primary-main">[{selectedColumn}]</span>
                   </p>
                 </div>
-                <div className="p-6 bg-[#f8f9fa] rounded-lg border border-gray-100">
-                  <h3 className="font-bold text-gray-700 mb-3">📈 모델 성능</h3>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs"><span>정확도 (Accuracy)</span><span className="font-bold">94.2%</span></div>
-                    <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="bg-primary-main h-full w-[94%]"></div></div>
-                    <div className="flex justify-between text-xs mt-4"><span>신뢰도 (Confidence)</span><span className="font-bold">88.7%</span></div>
-                    <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="bg-green-500 h-full w-[88%]"></div></div>
-                  </div>
+                <div className="flex gap-2">
+                  <button onClick={() => setViewMode('result')} className="bg-gray-50 text-gray-600 px-4 py-2 rounded text-xs font-bold border border-gray-100 hover:bg-gray-100 transition-colors">← 이전 단계</button>
+                  {viewMode === 'predict' && (
+                    <button onClick={handleStepThreeClick} className="bg-primary-main text-white px-4 py-2 rounded text-xs font-bold hover:bg-primary-dark transition-all shadow-sm">다음 단계 (솔루션) →</button>
+                  )}
                 </div>
               </div>
 
-              <button 
-                onClick={() => setViewMode('result')}
-                className="mt-8 text-primary-main font-bold hover:underline"
-              >
-                ← 다시 설정하기
-              </button>
-            </div>
-          </div>
+              {viewMode === 'predict' ? (
+                <div className="bg-white p-8 rounded-xl border border-primary-light shadow-xl text-center animate-in zoom-in-95 duration-500">
+                  <div className="w-20 h-20 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <h1 className="text-2xl font-black text-gray-800">예측 분석이 완료되었습니다!</h1>
+                  
+                  <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                    <div className="p-6 bg-[#f8f9fa] rounded-lg border border-gray-100">
+                      <h3 className="font-bold text-gray-700 mb-3">💡 예측 인사이트</h3>
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        '{selectedColumn}' 데이터를 기반으로 모델이 학습을 마쳤습니다. 향후 3개월간 해당 지표는 
+                        판매 패턴과 계절적 요인에 의해 약 <span className="text-green-600 font-bold">12.5% 상승</span>할 것으로 예측됩니다.
+                      </p>
+                    </div>
+                    <div className="p-6 bg-[#f8f9fa] rounded-lg border border-gray-100">
+                      <h3 className="font-bold text-gray-700 mb-3">📈 모델 성능</h3>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs"><span>정확도 (Accuracy)</span><span className="font-bold">94.2%</span></div>
+                        <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="bg-primary-main h-full w-[94%]"></div></div>
+                        <div className="flex justify-between text-xs mt-4"><span>신뢰도 (Confidence)</span><span className="font-bold">88.7%</span></div>
+                        <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden"><div className="bg-green-500 h-full w-[88%]"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <SolutionView data={data} selectedColumn={selectedColumn} />
+              )}
+           </div>
         )}
       </div>
     </DashboardLayout>
