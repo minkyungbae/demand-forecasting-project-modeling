@@ -7,7 +7,7 @@ import { IntroView } from './components/IntroView';
 import { SolutionView } from './components/SolutionView';
 import { LoginView } from './components/LoginView';
 import { SignupView } from './components/SignupView';
-import type{ ProductData, FilePayload } from './types';
+import type{ ProductData, FilePayload, UserProfile } from './types';
 
 type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution' | 'login' | 'signup';
 
@@ -17,9 +17,9 @@ const App: React.FC = () => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('intro');
   const [isPredicting, setIsPredicting] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
   
-  // 로그인 체크를 위한 상태
+  // 사용자 프로필 정보 상태
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleDataLoaded = useCallback((payload: FilePayload) => {
@@ -70,7 +70,15 @@ const App: React.FC = () => {
 
   const handleLoginSuccess = (username: string) => {
     setIsLoggedIn(true);
-    setUserName(username);
+    // 로그인 시 시뮬레이션된 프로필 정보 설정
+    setUserProfile({
+      user_id: 'user_' + Math.random().toString(36).substr(2, 9),
+      email: `${username.toLowerCase()}@example.com`,
+      name: username,
+      user_type: 'Premium', // 기본적으로 프리미엄 등급으로 설정
+      created_at: new Date().toISOString()
+    });
+    
     alert(`${username}님, 환영합니다!`);
     
     if (data.length > 0 && selectedColumn) {
@@ -78,6 +86,12 @@ const App: React.FC = () => {
     } else {
       setViewMode('intro');
     }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserProfile(null);
+    setViewMode('intro');
   };
 
   const handleSignupSuccess = () => {
@@ -100,13 +114,14 @@ const App: React.FC = () => {
         viewMode === 'result' || viewMode === 'upload' ? 1 : 
         (viewMode === 'predict' ? 2 : (viewMode === 'solution' ? 3 : 0))
       } 
-      userName={userName}
+      userProfile={userProfile}
       onDashboardClick={goToDashboard}
       onStepOneClick={handleStepOneClick}
       onStepTwoClick={handleStepTwoClick}
       onStepThreeClick={handleStepThreeClick}
       onLoginClick={() => setViewMode('login')}
       onSignupClick={() => setViewMode('signup')}
+      onLogout={handleLogout}
     >
       <div className="space-y-6">
         <div className="flex items-center gap-2 text-[13px] text-gray-500">
@@ -126,6 +141,7 @@ const App: React.FC = () => {
           <LoginView 
             onLoginSuccess={handleLoginSuccess} 
             onCancel={() => setViewMode('intro')} 
+            onSignupClick={() => setViewMode('signup')}
           />
         )}
 
