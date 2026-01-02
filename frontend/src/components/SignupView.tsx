@@ -17,7 +17,7 @@ export const SignupView: React.FC<SignupViewProps> = ({ onSignupSuccess, onCance
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault();  
     setError('');
 
     if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
