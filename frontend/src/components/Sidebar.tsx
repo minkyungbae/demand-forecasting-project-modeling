@@ -8,6 +8,7 @@ interface SidebarProps {
   onStepTwoClick?: () => void;
   onStepThreeClick?: () => void;
   onLoginClick?: () => void;
+  onSignupClick?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
@@ -16,12 +17,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onStepOneClick, 
   onStepTwoClick,
   onStepThreeClick,
-  onLoginClick
+  onLoginClick,
+  onSignupClick
 }) => {
   const mainMenus = [
     { title: 'ForeCastly', active: true, onClick: onDashboardClick },
     { title: '로그인', onClick: onLoginClick },
-    { title: '회원가입' },
+    { title: '회원가입', onClick: onSignupClick },
   ];
 
   const functions = [

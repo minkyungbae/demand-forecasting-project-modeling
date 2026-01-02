@@ -4,9 +4,10 @@ import React, { useState } from 'react';
 interface LoginViewProps {
   onLoginSuccess: (username: string) => void;
   onCancel: () => void;
+  onSignupClick?: () => void;
 }
 
-export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onCancel }) => {
+export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onCancel, onSignupClick }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -104,7 +105,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onCancel }
 
         <div className="mt-8 text-center">
           <p className="text-[11px] text-gray-400 font-medium">
-            계정이 없으신가요? <span className="text-primary-main font-bold cursor-pointer hover:underline">회원가입</span>
+            계정이 없으신가요? <span onClick={onSignupClick} className="text-primary-main font-bold cursor-pointer hover:underline">회원가입</span>
           </p>
         </div>
       </div>
