@@ -5,9 +5,10 @@ import { DataDashboard } from './components/DataDashboard';
 import { FileUpload } from './components/FileUpload';
 import { IntroView } from './components/IntroView';
 import { SolutionView } from './components/SolutionView';
+import { LoginView } from './components/LoginView';
 import type{ ProductData, FilePayload } from './types';
 
-type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution';
+type ViewMode = 'intro' | 'upload' | 'result' | 'predict' | 'solution' | 'login';
 
 const App: React.FC = () => {
   const [data, setData] = useState<ProductData[]>([]);
@@ -15,8 +16,9 @@ const App: React.FC = () => {
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('intro');
   const [isPredicting, setIsPredicting] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
   
-  // 로그인 체크를 위한 상태 (기본 false)
+  // 로그인 체크를 위한 상태
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleDataLoaded = useCallback((payload: FilePayload) => {
@@ -48,22 +50,9 @@ const App: React.FC = () => {
   };
 
   const handleStepThreeClick = () => {
-    // 3단계 진입 전 로그인 체크
     if (!isLoggedIn) {
-      const confirmLogin = window.confirm('3단계 결과는 회원만 확인 가능합니다. 로그인(시뮬레이션) 하시겠습니까?');
-      if (confirmLogin) {
-        setIsLoggedIn(true);
-        alert('로그인되었습니다. 이제 3단계 결과를 확인할 수 있습니다.');
-        // 로그인 성공 후 자동으로 3단계 이동
-        if (data.length > 0 && selectedColumn) {
-          setViewMode('solution');
-        } else if (data.length > 0) {
-          setViewMode('predict');
-          alert('먼저 예측하고 싶은 컬럼을 선택해주세요.');
-        } else {
-          setViewMode('upload');
-        }
-      }
+      alert('3단계 결과는 회원만 확인 가능합니다. 로그인이 필요합니다.');
+      setViewMode('login');
       return;
     }
 
@@ -75,6 +64,19 @@ const App: React.FC = () => {
       setViewMode('result');
     } else {
       setViewMode('solution');
+    }
+  };
+
+  const handleLoginSuccess = (username: string) => {
+    setIsLoggedIn(true);
+    setUserName(username);
+    alert(`${username}님, 환영합니다!`);
+    
+    // 이전에 보려던 화면이 솔루션이었다면 그리로 이동
+    if (data.length > 0 && selectedColumn) {
+      setViewMode('solution');
+    } else {
+      setViewMode('intro');
     }
   };
 
@@ -93,10 +95,12 @@ const App: React.FC = () => {
         viewMode === 'result' || viewMode === 'upload' ? 1 : 
         (viewMode === 'predict' ? 2 : (viewMode === 'solution' ? 3 : 0))
       } 
+      userName={userName}
       onDashboardClick={goToDashboard}
       onStepOneClick={handleStepOneClick}
       onStepTwoClick={handleStepTwoClick}
       onStepThreeClick={handleStepThreeClick}
+      onLoginClick={() => setViewMode('login')}
     >
       <div className="space-y-6">
         {/* Breadcrumb Info */}
@@ -111,6 +115,13 @@ const App: React.FC = () => {
 
         {viewMode === 'intro' && (
           <IntroView onStart={() => setViewMode('upload')} />
+        )}
+
+        {viewMode === 'login' && (
+          <LoginView 
+            onLoginSuccess={handleLoginSuccess} 
+            onCancel={() => setViewMode('intro')} 
+          />
         )}
 
         {viewMode === 'upload' && (
