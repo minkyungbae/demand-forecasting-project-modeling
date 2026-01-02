@@ -5,19 +5,23 @@ import { Sidebar } from './Sidebar';
 interface DashboardLayoutProps {
   children: React.ReactNode;
   currentStep: number;
+  userName?: string | null;
   onDashboardClick?: () => void;
   onStepOneClick?: () => void;
   onStepTwoClick?: () => void;
   onStepThreeClick?: () => void;
+  onLoginClick?: () => void;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
   children, 
   currentStep, 
+  userName,
   onDashboardClick,
   onStepOneClick,
   onStepTwoClick,
-  onStepThreeClick
+  onStepThreeClick,
+  onLoginClick
 }) => {
   return (
     <div className="flex w-full h-full overflow-hidden bg-[#ebedef]">
@@ -28,6 +32,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         onStepOneClick={onStepOneClick}
         onStepTwoClick={onStepTwoClick}
         onStepThreeClick={onStepThreeClick}
+        onLoginClick={onLoginClick}
       />
 
       {/* Main Container - 오른쪽 전체 */}
@@ -54,11 +59,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             </div>
             <div className="flex items-center gap-3 pl-4 border-l border-[#d8dbe0]">
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-bold text-gray-700 leading-none mb-1">Admin User</p>
-                <p className="text-[10px] text-gray-400">Super Admin</p>
+                <p className="text-xs font-bold text-gray-700 leading-none mb-1">{userName || 'Admin User'}</p>
+                <p className="text-[10px] text-gray-400">{userName ? 'Member' : 'Super Admin'}</p>
               </div>
               <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 bg-primary-main flex items-center justify-center text-white text-[10px] font-bold shadow-sm">
-                AD
+                {userName ? userName.substring(0,2).toUpperCase() : 'AD'}
               </div>
             </div>
           </div>
