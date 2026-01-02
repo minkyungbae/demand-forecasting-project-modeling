@@ -8,6 +8,7 @@ interface DashboardLayoutProps {
   onDashboardClick?: () => void;
   onStepOneClick?: () => void;
   onStepTwoClick?: () => void;
+  onStepThreeClick?: () => void;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ 
@@ -15,7 +16,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   currentStep, 
   onDashboardClick,
   onStepOneClick,
-  onStepTwoClick
+  onStepTwoClick,
+  onStepThreeClick
 }) => {
   return (
     <div className="flex w-full h-full overflow-hidden bg-[#ebedef]">
@@ -25,6 +27,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         onDashboardClick={onDashboardClick} 
         onStepOneClick={onStepOneClick}
         onStepTwoClick={onStepTwoClick}
+        onStepThreeClick={onStepThreeClick}
       />
 
       {/* Main Container - 오른쪽 전체 */}

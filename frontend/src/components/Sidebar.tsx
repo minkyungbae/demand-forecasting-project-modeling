@@ -6,9 +6,16 @@ interface SidebarProps {
   onDashboardClick?: () => void;
   onStepOneClick?: () => void;
   onStepTwoClick?: () => void;
+  onStepThreeClick?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick, onStepOneClick, onStepTwoClick }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ 
+  currentStep, 
+  onDashboardClick, 
+  onStepOneClick, 
+  onStepTwoClick,
+  onStepThreeClick
+}) => {
   const mainMenus = [
     { title: 'ForeCastly', active: true, onClick: onDashboardClick },
     { title: '로그인' },
@@ -18,7 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentStep, onDashboardClick,
   const functions = [
     { step: 1, label: '파일 업로드 및 분석', onClick: onStepOneClick },
     { step: 2, label: '모델 예측', onClick: onStepTwoClick },
-    { step: 3, label: '솔루션 결과' },
+    { step: 3, label: '솔루션 결과', onClick: onStepThreeClick },
   ];
 
   return (
