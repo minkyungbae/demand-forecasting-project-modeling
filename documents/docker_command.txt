@@ -1,0 +1,34 @@
+Docker Compose 사용 (권장)
+
+# Docker Compose로 MongoDB 실행
+docker compose up -d
+
+# MongoDB 상태 확인
+docker compose ps
+
+# MongoDB 로그 확인
+docker compose logs mongodb
+
+# MongoDB 중지
+docker compose down
+
+# 데이터까지 삭제하며 중지
+docker compose down -v
+------------------------------------
+
+# Docker 실행 중인지 확인
+docker info
+
+# MongoDB + mongo-express 실행
+docker compose up -d
+
+# 상태 확인
+docker compose ps
+-----------------------------------------
+
+mongo-express
+👉 http://localhost:8081
+
+-----------------------------------------
+# Backend 서버 실행
+uvicorn main:app --reload
