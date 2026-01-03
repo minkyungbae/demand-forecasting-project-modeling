@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: forecastly-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - forecastly-network
+    command: mongod --bind_ip_all
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MongoDB Express (선택사항 - 웹 UI)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: forecastly-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      # MongoDB 연결 설정 (Docker 네트워크 내부에서 접속)
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      # 또는 전체 URL 사용 (위 설정 대신 사용)
+      # ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+      # mongo-express 웹 UI 인증 (기본값: admin/pass)
+      ME_CONFIG_BASIC_AUTH_USERNAME: admin
+      ME_CONFIG_BASIC_AUTH_PASSWORD: pass
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - forecastly-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  forecastly-network:
+    driver: bridge
+
