@@ -3,6 +3,7 @@
 // 백엔드 API 요청 관리 파일
 // ======================================================================
 
+
 import axios from 'axios';
 import type {
     RegisterPayload,
@@ -26,60 +27,43 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-
-/* =======================
-    Auth
-======================= */
-
-// 회원가입 API
-export const register = async (
-    payload: RegisterPayload
-) => {
+export const register = async (payload: RegisterPayload) => {
     const response = await api.post('/auth/register', payload);
     return response.data;
 };
 
-// 로그인 API
-export const login = async (
-    username: string,
-    password: string
-): Promise<AuthResponse> => {
-    const formData = new URLSearchParams();
-    formData.append('username', username);
-    formData.append('password', password);
-
-    const response = await api.post('/auth/login', formData, {
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    });
-
+export const login = async (email: string, password: string): Promise<AuthResponse> => {
+    const response = await api.post('/auth/login', { email, password });
     return response.data;
 };
 
-
-/* =======================
-    File Upload
-======================= */
-
-// CSV 파일 업로드 API
-export const uploadCsvFile = async (
-    file: File,
-    targetColumn?: string
-): Promise<CsvUploadResponse> => {
-
+export const uploadCsvFile = async (file: File, targetColumn?: string): Promise<CsvUploadResponse> => {
     const formData = new FormData();
     formData.append('file', file);
-
     if (targetColumn) {
-    formData.append('target_column', targetColumn);
+        formData.append('target_column', targetColumn);
     }
+    const response = await api.post('/files/upload', formData);
+    return response.data;
+};
 
-    const response = await api.post(
-    '/files/upload',
-    formData
-    // ❗ Content-Type 직접 지정 금지
-    );
+// 시각화 관련 API
+export const getCountBar = async (fileId: string) => {
+    const response = await api.get(`/visualizations/${fileId}/products/count-bar`);
+    return response.data;
+};
 
+export const getSumBar = async (fileId: string) => {
+    const response = await api.get(`/visualizations/${fileId}/products/sum-bar`);
+    return response.data;
+};
+
+export const getTop10Bar = async (fileId: string) => {
+    const response = await api.get(`/visualizations/${fileId}/products/count-bar/top10`);
+    return response.data;
+};
+
+export const getProductTrend = async (fileId: string, productName: string) => {
+    const response = await api.get(`/visualizations/${fileId}/products/${encodeURIComponent(productName)}/trend`);
     return response.data;
 };
