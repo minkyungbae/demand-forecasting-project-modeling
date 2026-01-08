@@ -57,11 +57,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded }) => {
         data: (result as any).data || [] 
       } as any);
 
-    } catch (error) {
-      console.error('Upload error:', error);
-      alert('파일 업로드 및 분석 중 오류가 발생했습니다. 파일 형식을 확인해주세요.');
-    } finally {
-      setIsUploading(false);
+    } catch (error: any) {
+      console.error('Upload error details:', error.response?.data || error.message);
+      alert(`오류: ${error.response?.data?.detail || '서버와 통신 중 문제가 발생했습니다.'}`);
     }
   };
 
