@@ -18,17 +18,17 @@ type ViewMode =
   | 'signup';
 
 const App: React.FC = () => {
-  // 🔹 분석 결과 데이터 (※ 추후 API 연동 예정)
+  // 분석 결과 데이터 (※ 추후 API 연동 예정)
   const [data, setData] = useState<ProductData[]>([]);
 
-  // 🔹 업로드된 파일 정보
+  // 업로드된 파일 정보
   const [fileInfo, setFileInfo] = useState<FilePayload | null>(null);
 
   const [selectedColumn, setSelectedColumn] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('intro');
   const [isPredicting, setIsPredicting] = useState(false);
 
-  // 🔹 사용자 인증
+  // 사용자 인증
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -38,8 +38,8 @@ const App: React.FC = () => {
   const handleDataLoaded = useCallback((payload: FilePayload) => {
     setFileInfo(payload);
 
-    // 🔸 지금은 분석 API가 없으므로 data는 그대로 둠
-    // 🔸 이후: file_id로 분석 API 호출 → setData()
+    // 지금은 분석 API가 없으므로 data는 그대로 둠
+    // 이후: file_id로 분석 API 호출 → setData()
 
     setViewMode('result');
   }, []);
